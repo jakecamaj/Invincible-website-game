@@ -1,262 +1,229 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<title>Invincible Dodge</title>
-<style>
-  * { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    background: #0b1320;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    font-family: 'Trebuchet MS', sans-serif;
-    color: white;
-  }
-
-  h1 {
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 10px;
-  }
-
-  #game-container {
-    position: relative;
-    width: 800px;
-    height: 400px;
-    background: linear-gradient(to bottom, #1b2740, #0b1320);
-    border: 3px solid #3b9eff;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  #player {
-    position: absolute;
-    left: 60px;
-    top: 180px;
-    width: 80px;
-    height: 50px;
-    transition: top 0.05s linear;
-    z-index: 5;
-  }
-
-  #player img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  .obstacle {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    font-size: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 0;
-    z-index: 4;
-  }
-
-  #hud {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 18px;
-    z-index: 10;
-    text-shadow: 1px 1px 2px black;
-  }
-
-  #overlay-msg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.75);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    z-index: 20;
-  }
-
-  #overlay-msg h2 {
-    font-size: 36px;
-    margin-bottom: 10px;
-  }
-
-  #overlay-msg button {
-    margin-top: 15px;
-    padding: 10px 24px;
-    font-size: 16px;
-    background: #3b9eff;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-  }
-
-  #overlay-msg button:hover {
-    background: #2378d6;
-  }
-
-  #instructions {
-    margin-top: 14px;
-    color: #9fb6d9;
-    font-size: 14px;
-  }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Invincible: Dodge</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0b1021;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+    h1 {
+      margin: 20px 0 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    #score {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    #game {
+      position: relative;
+      width: 700px;
+      height: 400px;
+      margin: 0 auto;
+      background: linear-gradient(#1a2750, #0b1021);
+      border: 3px solid #57c4f5;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    #player {
+      position: absolute;
+      left: 60px;
+      top: 180px;
+      width: 80px;
+      height: 50px;
+      z-index: 5;
+      transition: top 0.05s linear;
+    }
+    #player img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .obstacle {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: #ff3b3b;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ff3b3b;
+    }
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    #overlay.hidden {
+      display: none;
+    }
+    button {
+      background: #0082ff;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    button:hover {
+      background: #006ad1;
+    }
+    #message {
+      font-size: 22px;
+    }
+    .controls {
+      margin-top: 12px;
+      color: #9bb4d6;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-
   <h1>Invincible: Dodge</h1>
+  <div id="score">Score: 0</div>
 
-  <div id="game-container">
-    <div id="hud">Score: 0</div>
-    <div id="player"><img src="mark.png" alt="Mark"></div>
-
-    <div id="overlay-msg">
-      <h2>Invincible: Dodge</h2>
-      <p>Use ↑ / ↓ or W / S to move. Avoid the obstacles!</p>
-      <button id="start-btn">Start Game</button>
+  <div id="game">
+    <div id="player">
+      <img src="mark.png" alt="Mark">
+    </div>
+    <div id="overlay">
+      <div id="message">Avoid the obstacles!</div>
+      <button id="startBtn">Start Game</button>
     </div>
   </div>
 
-  <p id="instructions">Press Start, then use Up/Down arrows or W/S to dodge.</p>
+  <div class="controls">Use &uarr; / &darr; or W / S to move</div>
 
-<script>
-  const gameContainer = document.getElementById('game-container');
-  const player = document.getElementById('player');
-  const overlay = document.getElementById('overlay-msg');
-  const startBtn = document.getElementById('start-btn');
-  const hud = document.getElementById('hud');
+  <script>
+    const game = document.getElementById('game');
+    const player = document.getElementById('player');
+    const scoreEl = document.getElementById('score');
+    const overlay = document.getElementById('overlay');
+    const message = document.getElementById('message');
+    const startBtn = document.getElementById('startBtn');
 
-  const GAME_HEIGHT = 400;
-  const GAME_WIDTH = 800;
-  const PLAYER_SIZE = 60;
-  const MOVE_SPEED = 6;
+    const GAME_W = 700;
+    const GAME_H = 400;
+    const PLAYER_W = 80;
+    const PLAYER_H = 50;
+    const PLAYER_X = 60;
+    const STEP = 25;
 
-  let playerY = 180;
-  let keys = {};
-  let obstacles = [];
-  let score = 0;
-  let gameRunning = false;
-  let spawnTimer = 0;
-  let spawnInterval = 90;
-  let frameCount = 0;
-  let animationId;
+    let playerY = 180;
+    let obstacles = [];
+    let running = false;
+    let score = 0;
+    let spawnTimer = 0;
+    let speed = 3;
+    let frameId = null;
 
-  document.addEventListener('keydown', (e) => {
-    keys[e.key] = true;
-  });
-  document.addEventListener('keyup', (e) => {
-    keys[e.key] = false;
-  });
-
-  function resetGame() {
-    obstacles.forEach(o => o.el.remove());
-    obstacles = [];
-    score = 0;
-    playerY = 180;
-    spawnInterval = 90;
-    frameCount = 0;
-    player.style.top = playerY + 'px';
-    hud.textContent = 'Score: 0';
-  }
-
-  function startGame() {
-    resetGame();
-    overlay.style.display = 'none';
-    gameRunning = true;
-    animationId = requestAnimationFrame(gameLoop);
-  }
-
-  function endGame() {
-    gameRunning = false;
-    cancelAnimationFrame(animationId);
-    overlay.innerHTML = `
-      <h2>You Got Hit!</h2>
-      <p>Final Score: ${score}</p>
-      <button id="start-btn">Play Again</button>
-    `;
-    overlay.style.display = 'flex';
-    document.getElementById('start-btn').addEventListener('click', startGame);
-  }
-
-  function spawnObstacle() {
-    const el = document.createElement('div');
-    el.className = 'obstacle';
-    el.textContent = '☄️';
-    el.style.left = GAME_WIDTH + 'px';
-    const y = Math.random() * (GAME_HEIGHT - 40);
-    el.style.top = y + 'px';
-    gameContainer.appendChild(el);
-    obstacles.push({ el, x: GAME_WIDTH, y, speed: 4 + Math.random() * 3 });
-  }
-
-  function checkCollision(ox, oy) {
-    const playerX = 60;
-    const pSize = PLAYER_SIZE;
-    const oSize = 40;
-    return (
-      playerX < ox + oSize &&
-      playerX + pSize > ox &&
-      playerY < oy + oSize &&
-      playerY + pSize > oy
-    );
-  }
-
-  function gameLoop() {
-    if (!gameRunning) return;
-    frameCount++;
-
-    // Player movement
-    if ((keys['ArrowUp'] || keys['w'] || keys['W']) && playerY > 0) {
-      playerY -= MOVE_SPEED;
-    }
-    if ((keys['ArrowDown'] || keys['s'] || keys['S']) && playerY < GAME_HEIGHT - PLAYER_SIZE) {
-      playerY += MOVE_SPEED;
-    }
-    player.style.top = playerY + 'px';
-
-    // Spawn obstacles
-    spawnTimer++;
-    if (spawnTimer >= spawnInterval) {
-      spawnObstacle();
+    function resetGame() {
+      // remove old obstacles
+      obstacles.forEach(o => o.el.remove());
+      obstacles = [];
+      playerY = 180;
+      player.style.top = playerY + 'px';
+      score = 0;
+      speed = 3;
       spawnTimer = 0;
-      if (spawnInterval > 35) spawnInterval -= 0.5;
+      scoreEl.textContent = 'Score: 0';
     }
 
-    // Move obstacles + check collisions
-    for (let i = obstacles.length - 1; i >= 0; i--) {
-      const o = obstacles[i];
-      o.x -= o.speed;
-      o.el.style.left = o.x + 'px';
-
-      if (checkCollision(o.x, o.y)) {
-        endGame();
-        return;
-      }
-
-      if (o.x < -40) {
-        o.el.remove();
-        obstacles.splice(i, 1);
-        score++;
-        hud.textContent = 'Score: ' + score;
-      }
+    function startGame() {
+      resetGame();
+      overlay.classList.add('hidden');
+      running = true;
+      loop();
     }
 
-    animationId = requestAnimationFrame(gameLoop);
-  }
+    function endGame() {
+      running = false;
+      cancelAnimationFrame(frameId);
+      message.textContent = 'Game Over! Score: ' + score;
+      startBtn.textContent = 'Play Again';
+      overlay.classList.remove('hidden');
+    }
 
-  startBtn.addEventListener('click', startGame);
-</script>
+    function spawnObstacle() {
+      const el = document.createElement('div');
+      el.className = 'obstacle';
+      const y = Math.random() * (GAME_H - 30);
+      el.style.left = GAME_W + 'px';
+      el.style.top = y + 'px';
+      game.appendChild(el);
+      obstacles.push({ el: el, x: GAME_W, y: y });
+    }
 
+    function loop() {
+      if (!running) return;
+
+      // spawn obstacles over time
+      spawnTimer++;
+      if (spawnTimer > 60) {
+        spawnObstacle();
+        spawnTimer = 0;
+      }
+
+      // move obstacles
+      for (let i = obstacles.length - 1; i >= 0; i--) {
+        const o = obstacles[i];
+        o.x -= speed;
+        o.el.style.left = o.x + 'px';
+
+        // collision check
+        if (
+          o.x < PLAYER_X + PLAYER_W &&
+          o.x + 30 > PLAYER_X &&
+          o.y < playerY + PLAYER_H &&
+          o.y + 30 > playerY
+        ) {
+          endGame();
+          return;
+        }
+
+        // remove off-screen, add score
+        if (o.x < -30) {
+          o.el.remove();
+          obstacles.splice(i, 1);
+          score++;
+          scoreEl.textContent = 'Score: ' + score;
+          if (score % 5 === 0) speed += 0.5; // gets harder
+        }
+      }
+
+      frameId = requestAnimationFrame(loop);
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (!running) return;
+      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+        playerY = Math.max(0, playerY - STEP);
+        player.style.top = playerY + 'px';
+      }
+      if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+        playerY = Math.min(GAME_H - PLAYER_H, playerY + STEP);
+        player.style.top = playerY + 'px';
+      }
+    });
+
+    startBtn.addEventListener('click', startGame);
+  </script>
 </body>
 </html>
